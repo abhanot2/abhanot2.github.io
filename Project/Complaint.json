@@ -1,0 +1,50 @@
+[
+  {
+    "area": "Student loan",
+    "value": 3846
+  },
+  {
+    "area": "Prepaid card",
+    "value": 1372
+  },
+  {
+    "area": "Payday loan",
+    "value": 143
+  },
+  {
+    "area": "Other financial service",
+    "value": 331
+  },
+  {
+    "area": "Mortgage",
+    "value": 139915
+  },
+  {
+    "area": "Money transfers",
+    "value": 1126
+  },
+  {
+    "area": "Debt collection",
+    "value": 16577
+  },
+  {
+    "area": "Credit reporting",
+    "value": 1778
+  },
+  {
+    "area": "Credit card",
+    "value": 81797
+  },
+  {
+    "area": "Consumer Loan",
+    "value": 11397
+  },
+  {
+    "area": "Checking or savings account",
+    "value": 2
+  },
+  {
+    "area": "Bank account or service",
+    "value": 62397
+  }
+]

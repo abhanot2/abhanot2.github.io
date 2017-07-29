@@ -1,0 +1,534 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<style>
+body {
+  background-color: #F1F3F3    
+}
+.axis {
+	font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #D4D8DA;
+  stroke-width: 2px;
+  shape-rendering: crispEdges;
+}
+
+.line {
+  fill: none;
+  stroke: #6F257F;
+  stroke-width: 5px;
+}
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+.focus circle {
+  fill: #FFFFFF;
+  stroke: #6F257F;
+  stroke-width: 5px;
+}
+  
+.hover-line {
+  stroke: #6F257F;
+  stroke-width: 2px;
+  stroke-dasharray: 3,3;
+}
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #D4D8DA;
+  stroke-width: 1px;
+  shape-rendering: crispEdges;
+}
+.x path {
+	display: none;
+}
+.toolTip {
+	position: absolute;
+	display: none;
+	min-width: 40px;
+	height: auto;
+	background: none repeat scroll 0 0 #fffff;
+	border: 1px solid #6F257F;
+	padding: 14px;
+	text-align: center;
+}
+.bar2 {
+  fill: steelblue;
+}
+
+.bar2:hover {
+  fill: brown;
+}
+</style>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>CFPB, a little known Hero</title>
+
+	<!-- ************ FULL PAGE ************** -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="fullpage/jquery.fullPage.css" />
+	<link rel="stylesheet" type="text/css" href="scrollytelling.css" />
+	<link href="https://fonts.googleapis.com/css?family=Roboto:400,100" rel="stylesheet">
+	<script type="text/javascript" src="fullpage/jquery.fullPage.min.js"></script>
+	<script type="text/javascript">
+		var headerColor = '#d8d8d8',
+			contentColor = '#E5E5E5',
+			cont2 = '#F3F3F3',
+			cont3 = '#cdcdcd';
+
+		$(document).ready(function() {
+			$('#fullpage').fullpage({
+				anchors: ['CFPB', 'Introduction', 'whyCFPB', 'Data', 'closing', 'about'],
+				sectionsColor: [headerColor, contentColor, cont2, cont3, cont2, contentColor, contentColor],
+				navigation: true,
+				navigationPosition: 'right',
+				navigationTooltips: ['CFPB', 'Introduction', 'whyCFPB', 'Data', 'closing',  'about']
+			});
+		});
+	</script>
+<!-- Bootstrap -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="https://d3js.org/d3.v4.js"></script>
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+	<script src="https://d3js.org/topojson.v1.min.js"></script>
+	
+	<script src="https://unpkg.com/topojson@3"></script>
+	
+</head>
+<body>
+	<div id="fullpage">
+		<div class="section" id="section0" >
+			<div class="header" id="main-title" >
+				<h1>Consumer Finance Protection Bureau</h1>
+				<h2>Little known facts that can save you a ton of $$$$$	</h2>
+			</div>
+		</div>
+
+		<div class="section" id="section1">
+		    <div class="content">
+				<h1>What is the Consumer Financial Protection Bureau</h1>
+				<p>Quite simply put it is a watchdog to make sure that the banks, lenders and other financial institutions</p>
+				<p>treat us and others like us, fairly. They play by the rules and do not resort to sneaky ways to make money off of us.</p>
+				<p>Below are the numbers as of last Quarter (7/20/2017).</p>
+				<p> <img src="2.png"></img></p>
+				<h3> Yes, you read it right that is Billion with a B!! </h3>
+				
+			</div>
+			
+		</div>
+
+		<div class="section" id="section2">
+			<div class="content">
+				<h1>How did we get here?</h1>
+				<p>The bureau was formed as a result of the <a href="https://en.wikipedia.org/wiki/Dodd%E2%80%93Frank_Wall_Street_Reform_and_Consumer_Protection_Act"> Dodd-Frank act </a></p>
+				<p>It was primarily aimed at preventing another melt down of our financial institutions, like the one in 2007-2008 and to prevent them from failing.</p>
+				<p>The infographic below shows the extent to which this act has strengthened our financial institutions.</p>
+				<p> Each major bank undergoes what is called as the <a href="http://ir.americanexpress.com/Cache/1001225264.PDF?O=PDF&T=&Y=&D=&FID=1001225264&iid=102700">"Stress Test" </a> to make sure they can endure another meltdown of the markets </p>
+				<p>So how have the banks done?</p>
+				<br>
+				<svg width="480" height="250"></svg>
+				<script>
+
+				var svg = d3.select("svg"),
+					margin = {top: 20, right: 20, bottom: 30, left: 40},
+					width = +svg.attr("width") - margin.left - margin.right,
+					height = +svg.attr("height") - margin.top - margin.bottom;
+
+				var parseTime = d3.timeParse("%d-%b-%Y")
+					bisectDate = d3.bisector(function(d) { return d.year; }).left;
+
+				var x = d3.scaleTime().range([0, width]);
+				var y = d3.scaleLinear().range([height, 0]);
+
+				var line = d3.line()
+					.x(function(d) { return x(d.year); })
+					.y(function(d) { return y(d.value); });
+
+				var g = svg.append("g")
+					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+				d3.json("data.json", function(error, data) {
+					if (error) throw error;
+
+					data.forEach(function(d) {
+					  d.year = parseTime(d.year);
+					  d.value = +d.value;
+					});
+
+					x.domain(d3.extent(data, function(d) { return d.year; }));
+					y.domain([d3.min(data, function(d) { return d.value; }) / 1.005, d3.max(data, function(d) { return d.value; }) * 1.005]);
+
+					g.append("g")
+						.attr("class", "axis axis--x")
+						.attr("transform", "translate(0," + height + ")")
+						.call(d3.axisBottom(x));
+
+					g.append("g")
+						.attr("class", "axis axis--y")
+						.call(d3.axisLeft(y).ticks(6).tickFormat(function(d) { return parseInt(d) + " "; }))
+					  .append("text")
+						.attr("class", "axis-title")
+						.attr("transform", "rotate(-90)")
+						.attr("y", 6)
+						.attr("dy", ".71em")
+						.style("text-anchor", "end")
+						.attr("fill", "#5D6971")
+						.text("Tier 1 Common Equity ratio");
+
+					g.append("path")
+						.datum(data)
+						.attr("class", "line")
+						.attr("d", line);
+
+					var focus = g.append("g")
+						.attr("class", "focus")
+						.style("display", "none");
+
+					focus.append("line")
+						.attr("class", "x-hover-line hover-line")
+						.attr("y1", 0)
+						.attr("y2", height);
+
+					focus.append("line")
+						.attr("class", "y-hover-line hover-line")
+						.attr("x1", width)
+						.attr("x2", width);
+
+					focus.append("circle")
+						.attr("r", 3);
+
+					focus.append("text")
+						.attr("x", 15)
+						.attr("dy", ".31em");
+
+					
+						
+					svg.append("rect")
+						.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+						.attr("class", "overlay")
+						.attr("width", width)
+						.attr("height", height)
+						.on("mouseover", function() { focus.style("display", null); })
+						.on("mouseout", function() { focus.style("display", "none"); })
+						.on("mousemove", mousemove);
+					
+
+					function mousemove() {
+					  var x0 = x.invert(d3.mouse(this)[0]),
+						  i = bisectDate(data, x0, 1),
+						  d0 = data[i - 1],
+						  d1 = data[i],
+						  d = x0 - d0.year > d1.year - x0 ? d1 : d0;
+					  focus.attr("transform", "translate(" + x(d.year) + "," + y(d.value) + ")");
+					  focus.select("text").text(function() { return d.value; });
+					  focus.select(".x-hover-line").attr("y2", height - y(d.value));
+					  focus.select(".y-hover-line").attr("x2", width + width);
+					}
+				});
+
+				</script>
+				<br/>
+				
+				<p>The <a href = "http://www.investopedia.com/terms/t/tier-1-common-capital-ratio.asp">Tier 1 Common Equity ratio </a> is a commonly used
+				measure to check how the banks are doing.The higher the number the better it is. </p>
+				<p>As you can see the lower numbers during the depression of 2007-09 indicate instability. </p>
+				<p>This is what prompted the formation of CFPB and since then the numbers have improved making ourfinancial institutions sound and more stable.</p>
+				
+			</div>
+		</div>
+		
+		<div class="section" id="section3">
+		<div class="content" id ="mybarchart3">
+		<H2>What else does the CFPB do?</H2>
+		<p><p> CFPB also does another important job, that of taking complaints from Customers regarding malpractices or unfair treatments.</p>
+				<p> In other words, it gives us, the consumers, a way to keep the Financial institutions from taking unfair advantage of us. </p>
+				<p> They cannot discriminate based on our color, gender, where we live. The decisions on our matters need to be taken only based on our finances. </p>
+				<h3>Despite everything, how many times have the institutions have tried to sneak past the regulators?</h3></p>
+		<script>
+
+				var	margin3 = {top: 50, right: 10, bottom: 20, left: 40};
+				var width3	= 480 - margin3.left - margin3.right,
+					height3 = 250 - margin3.top - margin3.bottom;
+				var svg3 = d3.select("#mybarchart3")
+								.append("svg")
+								.attr("width",width3+margin3.left+margin3.right)
+								.attr("height",height3+margin3.top+margin3.bottom);
+				var g1 = svg3.append("g")
+								.attr("transform", "translate(" + margin3.left + "," + margin3.top + ")");
+				var formatcomma = d3.format(",");
+
+		
+					var x3 = d3.scaleBand().rangeRound([0, width3]).padding(0.1),
+						y3 = d3.scaleLinear().rangeRound([height3, 0]);
+
+					var g3 = svg3.append("g")
+						.attr("transform", "translate(" + margin3.left + "," + margin3.top + ")");
+					var tooltip2 = d3.select("body").append("div").attr("class", "toolTip");
+
+					d3.tsv("ytd.tsv", function(dat) {
+					  dat.frequency = +dat.frequency;
+					  
+					  return dat;
+					}, function(error, dat) {
+					  if (error) throw error;
+
+					  x3.domain(dat.map(function(d) { return d.year; }));
+					  y3.domain([0, d3.max(dat, function(d) { return d.frequency; })]);
+					  
+
+					  g3.append("g")
+						  .attr("class", "axis axis--x")
+						  .attr("transform", "translate(0," + height3 + ")")
+						  .call(d3.axisBottom(x3));
+
+					  g3.append("g")
+						  .attr("class", "axis axis--y")
+					      
+						.call(d3.axisLeft(y3).ticks(10).tickFormat(function(d) { return parseInt(d / 1000); }))
+						  .append("text")
+											.attr("class", "axis-title")
+											.attr("transform", "rotate(-90)")
+											.attr("y", 6)
+											.attr("dy", ".71em")
+											.style("text-anchor", "end")
+											.attr("fill", "#5D6971")
+											.text("Complaints in '000s");
+
+					  g3.selectAll(".bar")
+						.data(dat)
+						.enter().append("rect")
+						        .attr("class", "bar2")
+
+						  .attr("x", function(d) { return x3(d.year); })
+						  .attr("y", function(d) { return y3(d.frequency); })
+						  .attr("width", x3.bandwidth())
+						  .attr("height", function(d) { return height3 - y3(d.frequency); })
+						  .attr("fill","steelblue")
+
+						  .text("Year")
+						.on("mousemove", function(d){
+					      	tooltip2 
+						  .style("left", d3.event.pageX + "px")
+						  .style("top", d3.event.pageY + "px")
+						  .style("display", "inline-block")
+						  .text(formatcomma(d.frequency));
+						  //.html((d.year) + "<br>" + (d.frequency));
+					})
+						.on("mouseout", function(d){ tooltip2.style("display", "none");});
+						
+					});
+	
+	
+	
+				var	margin4 = {top: 50, right: 10, bottom: 20, left: 180};
+				var width4	= 480 - margin4.left - margin4.right,
+					height4 = 250 - margin4.top - margin4.bottom;
+				var svg4 = d3.select("#mybarchart3")
+								.append("svg")
+								.attr("width",width4+margin4.left+margin4.right)
+								.attr("height",height4+margin4.top+margin4.bottom);
+				var g4 = svg4.append("g")
+								.attr("transform", "translate(" + margin4.left + "," + margin4.top + ")");
+						
+	
+    
+				var tooltip4 = d3.select("body").append("div").attr("class", "toolTip");
+  
+				var x4=  d3.scaleLinear().range([0,width4]);
+				var y4 = d3.scaleBand().range([height4, 0]);
+				
+					
+				var color2 = d3.scaleOrdinal().range(["#93883b",
+							"#6a70d7",
+							"#72b14d",
+							"#5c3788",
+							"#c0ac3f",
+							"#ca74c6",
+							"#4e9d54",
+							"#b2457c",
+							"#48c69e",
+							"#b7464c",
+							"#6d8dd7",
+							"#c26936"]);
+							  
+			d3.json("Complaint.json", function(error, data4) {
+										if (error) throw error;
+				
+				x4.domain([0, d3.max(data4, function(d) { return d.value; })]);
+				y4.domain(data4.map(function(d) { return d.area; })).padding(0.1);
+							
+				g4.append("g")
+					.attr("class", "x axis")
+					.attr("transform", "translate(0," + height4 + ")")
+					.call(d3.axisBottom(x4).ticks(5).tickFormat(function(d) { return parseInt(d / 1000); }).tickSizeInner([-height4]));
+
+				g4.append("g")
+					.attr("class", "y axis")
+					.call(d3.axisLeft(y4));
+
+				g4.selectAll(".bar")
+					.data(data4)
+				    .enter().append("rect")
+					.attr("class", "bar")
+					.attr("x", 0)
+					.attr("height", y4.bandwidth())
+					.attr("y", function(d) { return y4(d.area); })
+					.attr("width", function(d) { return x4(d.value); })
+					.attr("fill",function(d,i){return color2	(i);})
+					
+					.on("mousemove", function(d){
+						tooltip4
+						  .style("left", d3.event.pageX - 50 + "px")
+						  .style("top", d3.event.pageY - 70 + "px")
+						  .style("display", "inline-block")
+						  .text(formatcomma(d.value));
+						  //.html((d.area) + "<br>" + (d.value));
+					})
+						.on("mouseout", function(d){ tooltip4.style("display", "none");});
+			});
+			</script>
+			<p>The yearly trend and the categorization data above shows two important facts: </p>
+			<p><li>The complaints are rising, this can be attributed to the increased awareness and the many companies that offer credit protection and redressal as a service.</li></p>
+			</p><li>The data with the CFPB in various categories showing clearly that the Mortgate products are clearly the worst offenders followed by credit card grievances. </li></p> 
+			</div>
+		</div>
+		<div class="section" id="section4" >
+			<div class="content" id="mycircles" >
+				<H2> So does the size of the institution, necessarily corrleate to bigger irregularities? Are the big guys getting away with it? </H2>
+				<p> The data chart below shows the asset vs complaints of 19 major Financial institutions. Since the asset disparity is large, the 
+					y-axis representing the assets are displayed in a logarithmic scale. </p>
+				<br/>
+				<H3> Go ahead and hover over the dots to see the institutions and the complaints registered against them from 2011 onwards </H3>
+				
+					
+				<script>
+
+// set the dimensions and margins of the graph
+		var margin6 = {top: 50, right: 20, bottom: 30, left: 50},
+			width6 = 660 - margin6.left - margin6.right,
+			height6 = 600 - margin6.top - margin6.bottom;
+		// set the ranges
+		var x6 = d3.scaleLinear().range([0, width6]);
+		var y6 = d3.scaleLog().range([height6, 0]);
+		var color3 = d3.scaleOrdinal().range(["#93883b",
+									"#6a70d7",
+									"#72b14d",
+									"#5c3788",
+									"#c0ac3f",
+									"#ca74c6",
+									"#4e9d54",
+									"#b2457c",
+									"#48c69e",
+									"#b7464c",
+									"#6d8dd7",
+									"#c26936"]);
+							
+				var formatcom = d3.format(",");
+				// moves the 'group' element to the top left margin
+				var svg6 = d3.select("#mycircles").append("svg")
+							.attr("width", width6 + margin6.left + margin6.right)
+							.attr("height", height6 + margin6.top + margin6.bottom)
+							.append("g")
+							.attr("transform",
+							"translate(" + margin6.left + "," + margin6.top + ")");
+
+				// Get the data
+				d3.tsv("companyasset.tsv", function(error, data6) {
+				  if (error) throw error;
+
+						data6.sort(function(a, b) { return a.value - b.value; });
+				  
+				  // format the data
+				  data6.forEach(function(d) {
+					  d.asset = +d.asset;
+					  d.count = +d.count;
+				  });
+
+				  // Scale the range of the data
+				  x6.domain([0,80000]);
+				  y6.domain([1,2600]);
+
+				  var tooltip6 = d3.select("body").append("div").attr("class", "toolTip");
+				   svg6.selectAll("dot")
+					  .data(data6)
+					  .enter().append("circle")
+					  .attr("r", 5)
+					  .attr("cx", function(d) { return x6(d.count); })
+					  .attr("cy", function(d) { return (y6(d.asset)); })
+					  .attr("fill",function(d,i){return color3	(i);})
+					  .on("mousemove", function(d){
+										tooltip6
+										  .style("left", d3.event.pageX -60  + "px")
+										  .style("top", d3.event.pageY  -60 + "px")
+										  .style("display", "inline-block")
+										  .text(formatcom(d.count)+ ","+d.company);
+										  
+									})
+					.on("mouseout", function(d){ tooltip6.style("display", "none");});
+				  // Add the X Axis
+				  svg6.append("g")
+					  .attr("transform", "translate(0," + height6 + ")")
+					  .call(d3.axisBottom(x6));
+
+				  // Add the Y Axis
+				  svg6.append("g")
+					  .call(d3.axisLeft(y6).ticks(5).tickFormat(function (d) { return parseInt(d);}))
+					 .append("text")
+						.attr("class", "axis-title")
+						.attr("transform", "rotate(-90)")
+						.attr("y", 6)
+						.attr("dy", ".71em")
+						.style("text-anchor", "end")
+						.attr("fill", "#5D6971")
+						.text("Assets in Billion Dollars");
+				});
+
+</script>
+			
+			</div>
+			<div class="content">
+			<p> 
+			We do see that the larger institutions are impacted more since they deal with a lot more customers. The data however also brings to light several players that are not so large
+			but are still significant due to their mortgage or large corporate dealings.
+			</p> 
+			</div>
+			</div>
+		
+		<div class="section" id="About">
+		<div class="content">
+		<H2> Further information and credits </H2>
+		<p>This is just a very subtle attempt at pointing out how the CFPB has protected consumers and at the same time urged the financial institutions to become more stable</p>
+		
+		<div class = "credits">
+		This work has been possible due to the following references:
+		
+		<li> http://d3js.org </li>
+		<li> Examples on d3js.org </li>
+		
+		<li> Consumer Finance Protection Bureau site <a href="https://www.consumerfinance.gov"> here </a>.</li>
+		<li> Fullpage framework <a href="https://alvarotrigo.com/fullPage/"> here </a>.</li>
+		<li> Bootstrap framework <a href="https://getbootstrap.com"> here</a>.</li>
+		<li> Some of the color palettes where taken from the <a href="http://tools.medialab.sciences-po.fr/iwanthue/"> I want hue </a></li>
+		<li> Of course none of this would have been completed if it was not for Piazza and Slack forums for the class </li>
+		<li> Special thanks to Eric Huber and Prof. Hart for the guidance on the forums above</li>
+		<li> Last but not the least, my family for letting me be for hours together while I figured out all the frameworks :)... </li>
+		
+		
+		
+		
+		
+		</div>
+		</div>
+	</div>
+		
+
+	
+</body>
+</html>

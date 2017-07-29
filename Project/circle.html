@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style> /* set the CSS */
+
+
+.line {
+    stroke: #E4002B;
+    fill: none;
+    stroke-width: 3;
+}
+</style>
+<body>
+
+<!-- load the d3.js library -->    	
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script>
+
+// set the dimensions and margins of the graph
+var margin = {top: 20, right: 20, bottom: 30, left: 50},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+
+
+// set the ranges
+var x = d3.scaleLinear().range([0, width]);
+var y = d3.scaleLog().range([height, 0]);
+
+// define the line
+var valueline = d3.line()
+    .x(function(d) { return x(d.count); })
+    .y(function(d) { return y(d.asset); });
+
+// append the svg obgect to the body of the page
+// appends a 'group' element to 'svg'
+// moves the 'group' element to the top left margin
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+// Get the data
+d3.tsv("companyasset.tsv", function(error, data) {
+  if (error) throw error;
+
+	  	data.sort(function(a, b) { return a.value - b.value; });
+  
+  // format the data
+  data.forEach(function(d) {
+      d.asset = +d.asset;
+	  d.count = +d.count;
+  });
+
+  // Scale the range of the data
+  x.domain([0,80000]);
+  y.domain([10,2600]);
+  //x.domain(d3.max(data, function(d) { return d.count; }));
+  //y.domain([0, d3.max(data, function(d) { return d.asset; })]);
+
+  // Add the valueline path.
+  /*svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .attr("d", valueline);
+    */  
+  // Add the scatterplot
+  var x_val=[];
+  var y_val=[];
+  
+  data.forEach(function(d){
+	x_val.push(d.count);
+	y_val.push(d.asset);
+  });
+  var data2=createplot(x_val,y_val);
+   data2.forEach(function(d) {
+        d.x = +d.x;
+        d.y = +d.y;
+        d.yhat = +d.yhat;
+    });
+  
+  
+    var line = d3.line()
+        .x(function(d) {
+            return x(d.x);
+        })
+        .y(function(d) {
+            return y(d.yhat);
+        });
+  
+  console.log(data2);
+  
+   svg.selectAll("dot")
+      .data(data)
+    .enter().append("circle")
+      .attr("r", 5)
+      .attr("cx", function(d) { return x(d.count); })
+      .attr("cy", function(d) { return (y(d.asset)); });
+
+  // Add the X Axis
+  svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+  // Add the Y Axis
+  svg.append("g")
+      .call(d3.axisLeft(y));
+
+	
+	  svg.append("path")
+        .datum(data2)
+        .attr("class", "line")
+        .attr("d", line2);
+
+
+	  
+	function createplot(x,y){
+	console.log("ajit");
+
+	
+        var x_mean = 0;
+        var y_mean = 0;
+        var term1 = 0;
+        var term2 = 0;
+        
+		for (var i = 0;i<x.length;i++){
+			x_mean += x[i];
+			y_mean += y[i];
+			
+		
+		}
+	   x_mean /=x.length;
+	   y_mean /=y.length;
+	   console.log(x_mean);
+		console.log(y_mean);
+	   var xr=0;
+	   var yr=0;
+	   
+	   for (i=0;i<x.length;i++){
+			xr=x[i]-x_mean;
+			yr=y[i]-y_mean;
+			term1 += xr*yr;
+			term2 +=yr*yr;
+	   
+	  }
+	  
+	  var b1 = term1/term2;
+	  var b0 = y_mean - (b1 *x_mean);
+	  
+	  yhat=[];
+	   for (i = 0; i < x.length; i++) {
+            yhat.push(b0 + (x[i] * b1));
+        }
+console.log(yhat);
+        var data2 = [];
+       for (i = 0; i < y.length; i++) {
+            data2.push({
+                "yhat": yhat[i],
+                 "y": y[i],
+                "x": x[i]
+            })
+        }
+	  return(data2);
+	  }
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+});
+
+</script>
+</body>

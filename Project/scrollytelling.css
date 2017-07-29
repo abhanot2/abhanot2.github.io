@@ -1,0 +1,64 @@
+/* Style for fullpage
+* --------------------------------------- */
+#fp-nav ul li a span {
+	background:#110000;
+}
+#fp-nav ul li .fp-tooltip {
+	color: #110000;
+}
+body {
+	font-family: 'Courier' !important;
+	color: #110000;
+}
+
+/* Style for section headers
+* --------------------------------------- */
+.header h1 {
+  font-size: 5em;
+	font-family: 'Courier', sans-serif;
+	font-weight:100;
+	margin:0;
+}
+.header h2 {
+	font-size: 0.9em;
+	font-family: Canela;
+	text-transform: uppercase;
+	letter-spacing: 0.3em;
+}
+#main-title {
+	font-size: 2em;
+}
+.header {
+	text-align: center;
+	padding-left: 0px;
+}
+.header p {
+	font-size: 2em;
+	font-weight: 100;
+}
+#main-title p {
+	font-size: 1em;
+}
+
+/* Style for section content
+* --------------------------------------- */
+.content h1 {
+	font-size: 300%;
+	font-weight:100;
+	font-family: Courier;
+}
+.content {
+	text-align:center;
+	padding-left: 20px;
+	padding-right: 20px;
+	font-weight:100;
+}
+.content p {
+	font-size: 120%;
+	width: 100%;
+}
+
+
+.section {
+	background-color: Aliceblue;
+}
